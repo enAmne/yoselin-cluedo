@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Yoselin Cluedo</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="theme-color" content="#121212">
+  </head>
+  <body>
+    <!-- Pantalla de inicio -->
+    <main id="pantalla-inicio" class="pantalla visible">
+      <h1 class="titulo">Yoselin Cluedo</h1>
+      <section class="botonera">
+        <button id="btn-nuevo-juego" class="btn">Iniciar nuevo juego</button>
+        <button id="btn-continuar" class="btn">Continuar juego</button>
+        <button id="btn-configurar" class="btn">Configurar juego</button>
+        <button id="btn-salir" class="btn btn-secundario">Salir de la aplicación</button>
+      </section>
+      <p id="mensaje" class="mensaje"></p>
+    </main>
+
+    <!-- Pantalla de configuración -->
+    <main id="pantalla-configuracion" class="pantalla">
+      <h2 class="titulo">Configuración del juego</h2>
+      <form id="form-configuracion" class="formulario">
+        <label class="campo">
+          <span>Número de jugadores</span>
+          <input id="cfg-jugadores" type="number" min="3" max="6" value="4">
+        </label>
+        <label class="campo">
+          <span>Idioma</span>
+          <select id="cfg-idioma">
+            <option value="es" selected>Español</option>
+            <option value="en">Inglés</option>
+          </select>
+        </label>
+        <div class="acciones-form">
+          <button type="button" id="btn-guardar-config" class="btn">Guardar configuración</button>
+          <button type="button" id="btn-volver-inicio" class="btn btn-secundario">Volver al inicio</button>
+        </div>
+      </form>
+      <p id="mensaje-config" class="mensaje"></p>
+    </main>
+
+    <!-- Pantalla de juego -->
+    <main id="pantalla-juego" class="pantalla">
+      <h2 class="titulo">Partida en curso</h2>
+      <section class="tablero">
+        <div class="panel">Tablero y controles pendientes de normas</div>
+      </section>
+      <section class="botonera">
+        <button id="btn-guardar-partida" class="btn">Guardar partida</button>
+        <button id="btn-terminar-partida" class="btn btn-secundario">Terminar partida</button>
+        <button id="btn-ir-inicio-desde-juego" class="btn btn-secundario">Volver al inicio</button>
+      </section>
+      <p id="mensaje-juego" class="mensaje"></p>
+    </main>
+
+    <script src="./app.js"></script>
+    <script>
+      // Registro del Service Worker para instalación y uso offline
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js');
+        });
+      }
+    </script>
+  </body>
+</html>
