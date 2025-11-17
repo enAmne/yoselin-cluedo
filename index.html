@@ -7,65 +7,167 @@
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="stylesheet" href="./style.css">
     <meta name="theme-color" content="#121212">
+    <script>
+      // Ajuste dinámico del fondo para GitHub Pages con rutas de respaldo
+      // Comentarios en español: probamos varias rutas hasta encontrar una que cargue
+      (function() {
+        const esGithub = location.host.endsWith('github.io');
+        const segmentoRepositorio = esGithub ? (location.pathname.split('/')[1] || '') : '';
+        const base = segmentoRepositorio ? '/' + segmentoRepositorio : '';
+
+        // Redirección canónica: si la URL termina en /index.html, reemplazar por la raíz
+        // Comentarios en español: esto deja la misma página pero limpia la URL
+        if (esGithub && location.pathname.endsWith('/index.html')) {
+          try {
+            history.replaceState(null, '', base + '/');
+            console.log('URL normalizada a la raíz:', base + '/');
+          } catch (e) {
+            console.warn('No se pudo normalizar la URL:', e);
+          }
+        }
+
+        const rutasPosibles = [
+          base + '/assets/lamansiondeyoselin.jpg',
+          './assets/lamansiondeyoselin.jpg',
+          'assets/lamansiondeyoselin.jpg'
+        ];
+
+        function probarRuta(indice) {
+          if (indice >= rutasPosibles.length) {
+            console.warn('No se pudo cargar ninguna ruta de fondo. Se mantiene el fondo por defecto.');
+            return;
+          }
+          const ruta = rutasPosibles[indice];
+          const img = new Image();
+          img.onload = function() {
+            document.documentElement.style.setProperty('--fondo', `url('${ruta}')`);
+            console.log('Fondo aplicado correctamente:', ruta);
+          };
+          img.onerror = function() {
+            console.warn('No se pudo cargar el fondo en la ruta:', ruta);
+            probarRuta(indice + 1);
+          };
+          img.src = ruta;
+        }
+
+        probarRuta(0);
+      })();
+    </script>
+  
+    <!-- Meta tags para Netlify -->
+    <meta name="description" content="Juego de Cluedo personalizado - La mansión de Yoselin">
+    <meta name="keywords" content="cluedo, juego, misterio, yoselin">
+    <meta name="author" content="Yoselin">
+    
+    <!-- Open Graph para compartir -->
+    <meta property="og:title" content="Yoselin Cluedo">
+    <meta property="og:description" content="Juega al Cluedo en la mansión de Yoselin">
+    <meta property="og:image" content="./assets/lamansiondeyoselin.jpg">
+    <meta property="og:type" content="website">
   </head>
   <body>
     <!-- Pantalla de inicio -->
-    <main id="pantalla-inicio" class="pantalla visible">
-      <h1 class="titulo">Yoselin Cluedo</h1>
-      <section class="botonera">
-        <button id="btn-nuevo-juego" class="btn">Iniciar nuevo juego</button>
-        <button id="btn-continuar" class="btn">Continuar juego</button>
-        <button id="btn-configurar" class="btn">Configurar juego</button>
-        <button id="btn-salir" class="btn btn-secundario">Salir de la aplicación</button>
-      </section>
-      <p id="mensaje" class="mensaje"></p>
-    </main>
+    <section id="pantalla-inicio" class="pantalla visible">
+      <main class="contenedor">
+        <h1 class="titulo">Yoselin Cluedos</h1>
+        <p style="margin-bottom: 20px; font-size: 1.1em;">¡Bienvenido a la mansión misteriosa!</p>
+        
+        <section class="botonera">
+          <button id="btn-nuevo-juego" class="btn">Iniciar nuevo juego</button>
+          <button id="btn-continuar" class="btn">Continuar juego</button>
+          <button id="btn-configurar" class="btn">Configurar juego</button>
+          <button id="btn-salir" class="btn btn-secundario">Salir de la aplicación</button>
+        </section>
+
+        <p id="mensaje" class="mensaje"></p>
+      </main>
+    </section>
 
     <!-- Pantalla de configuración -->
-    <main id="pantalla-configuracion" class="pantalla">
-      <h2 class="titulo">Configuración del juego</h2>
-      <form id="form-configuracion" class="formulario">
-        <label class="campo">
-          <span>Número de jugadores</span>
-          <input id="cfg-jugadores" type="number" min="3" max="6" value="4">
-        </label>
-        <label class="campo">
-          <span>Idioma</span>
-          <select id="cfg-idioma">
-            <option value="es" selected>Español</option>
-            <option value="en">Inglés</option>
-          </select>
-        </label>
-        <div class="acciones-form">
-          <button type="button" id="btn-guardar-config" class="btn">Guardar configuración</button>
-          <button type="button" id="btn-volver-inicio" class="btn btn-secundario">Volver al inicio</button>
+    <section id="pantalla-configuracion" class="pantalla">
+      <div class="contenedor">
+        <h2 class="titulo">⚙️ Configuración</h2>
+        
+        <div class="formulario-config">
+          <div class="campo">
+            <label for="cfg-jugadores">Número de jugadores:</label>
+            <input type="number" id="cfg-jugadores" min="2" max="8" value="4">
+          </div>
+          
+          <div class="campo">
+            <label for="cfg-idioma">Idioma:</label>
+            <select id="cfg-idioma">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+            </select>
+          </div>
         </div>
-      </form>
-      <p id="mensaje-config" class="mensaje"></p>
-    </main>
+
+        <div class="botonera">
+          <button id="btn-guardar-config" class="btn">Guardar configuración</button>
+          <button id="btn-volver-inicio" class="btn btn-secundario">Volver al inicio</button>
+        </div>
+
+        <p id="mensaje-config" class="mensaje"></p>
+      </div>
+    </section>
 
     <!-- Pantalla de juego -->
-    <main id="pantalla-juego" class="pantalla">
-      <h2 class="titulo">Partida en curso</h2>
-      <section class="tablero">
-        <div class="panel">Tablero y controles pendientes de normas</div>
-      </section>
-      <section class="botonera">
-        <button id="btn-guardar-partida" class="btn">Guardar partida</button>
-        <button id="btn-terminar-partida" class="btn btn-secundario">Terminar partida</button>
-        <button id="btn-ir-inicio-desde-juego" class="btn btn-secundario">Volver al inicio</button>
-      </section>
-      <p id="mensaje-juego" class="mensaje"></p>
-    </main>
+    <section id="pantalla-juego" class="pantalla">
+      <div class="contenedor">
+        <h2 class="titulo">🎲 Partida en curso</h2>
+        
+        <div class="area-juego">
+          <p>Aquí irá el desarrollo del juego tipo Cluedo</p>
+          <p>Estado: <span id="estado-partida">En espera</span></p>
+        </div>
 
+        <div class="botonera">
+          <button id="btn-guardar-partida" class="btn">Guardar partida</button>
+          <button id="btn-terminar-partida" class="btn btn-secundario">Terminar partida</button>
+          <button id="btn-ir-inicio-desde-juego" class="btn btn-secundario">Volver al inicio</button>
+        </div>
+
+        <p id="mensaje-juego" class="mensaje"></p>
+      </div>
+    </section>
+
+    <!-- Scripts -->
     <script src="./app.js"></script>
     <script>
       // Registro del Service Worker para instalación y uso offline
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js');
+          navigator.serviceWorker.register('./sw.js')
+            .then(registration => {
+              console.log('ServiceWorker registrado correctamente:', registration);
+            })
+            .catch(error => {
+              console.log('Error al registrar ServiceWorker:', error);
+            });
         });
       }
+      
+      // Verificar que todos los elementos necesarios existen
+      window.addEventListener('DOMContentLoaded', function() {
+        const elementosNecesarios = [
+          { id: 'pantalla-inicio', nombre: 'Pantalla de inicio' },
+          { id: 'pantalla-configuracion', nombre: 'Pantalla de configuración' },
+          { id: 'pantalla-juego', nombre: 'Pantalla de juego' },
+          { id: 'btn-nuevo-juego', nombre: 'Botón nuevo juego' },
+          { id: 'btn-configurar', nombre: 'Botón configurar' },
+          { id: 'btn-salir', nombre: 'Botón salir' }
+        ];
+        
+        elementosNecesarios.forEach(elemento => {
+          const elem = document.getElementById(elemento.id);
+          if (!elem) {
+            console.error('❌ Elemento no encontrado:', elemento.nombre, '(' + elemento.id + ')');
+          } else {
+            console.log('✅ Elemento encontrado:', elemento.nombre);
+          }
+        });
+      });
     </script>
   </body>
 </html>

@@ -1,12 +1,16 @@
 {
-  "name": "Yoselin Cluedo",
-  "short_name": "Cluedo",
-  "start_url": "./index.html",
+  "name": "Yoselin Cluedo - La Mansión",
+  "short_name": "Yoselin Cluedo",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#121212",
+  "orientation": "portrait",
+  "description": "Juego de misterio en la mansión de Yoselin",
+  "categories": ["games", "entertainment"],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
