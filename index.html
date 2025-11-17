@@ -7,6 +7,11 @@
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="stylesheet" href="./style.css">
     <meta name="theme-color" content="#121212">
+    <style>
+      html, body { height: 100%; min-height: 100vh; }
+      body { background-repeat: no-repeat; background-size: cover; background-position: center; }
+      @media (max-width: 768px), (hover: none) { body { background-attachment: scroll; } }
+    </style>
     <script>
       // Ajuste dinámico del fondo para GitHub Pages con rutas de respaldo
       // Comentarios en español: probamos varias rutas hasta encontrar una que cargue
@@ -41,6 +46,7 @@
           const img = new Image();
           img.onload = function() {
             document.documentElement.style.setProperty('--fondo', `url('${ruta}')`);
+            document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${ruta}')`;
             console.log('Fondo aplicado correctamente:', ruta);
           };
           img.onerror = function() {
