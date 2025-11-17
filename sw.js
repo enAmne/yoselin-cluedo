@@ -1,12 +1,12 @@
 // Service Worker básico para cachear y permitir instalación/offline
-const NOMBRE_CACHE = 'yoselin-cluedo-v1';
+const NOMBRE_CACHE = 'yoselin-cluedo-v2';
 const RECURSOS = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './manifest.webmanifest',
-  './assets/fondo.jpg',
+  './assets/lamansiondeyoselin.jpg',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
