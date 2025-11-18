@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Eczar:wght@400;600&family=Quicksand:wght@400;500;600&display=swap');
+
+/* Variables globales: cambia aquí el fondo del juego */
+:root {
+  --fondo: url('./assets/lamansiondeyoselin.jpg');
+  --color-primario: #ffe08a;
+  --color-secundario: #2c2c2c;
+  --color-texto: #ffffff;
+  --fuente-principal: 'Quicksand', 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --fuente-titulos: 'Eczar', 'Times New Roman', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  min-height: 100svh;
+  margin: 0;
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  background: var(--color-secundario);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+body {
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), var(--fondo);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center top;
+  background-attachment: fixed;
+}
+
+/* Ajustes para móviles y pantallas táctiles */
+@media (max-width: 768px), (hover: none) {
+  body {
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+  }
+}
+
+/* Pantallas */
+.pantalla {
+  display: none;
+  min-height: 100dvh;
+  padding: 24px;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.visible { display: flex; }
+
+.titulo {
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  font-family: var(--fuente-titulos);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.botonera {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  background: var(--color-primario);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  font-family: var(--fuente-principal);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.btn:active { transform: scale(0.99); }
+.btn-secundario { background: #e0e0e0; }
+
+.mensaje {
+  text-align: center;
+  min-height: 24px;
+  opacity: 0.9;
+  font-family: var(--fuente-principal);
+  letter-spacing: 0.015em;
+}
+
+.intro-bienvenida {
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  font-family: var(--fuente-principal);
+}
+
+/* Formulario de configuración */
+.formulario-config {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.campo input, .campo select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  background: rgba(255,255,255,0.1);
+  color: var(--color-texto);
+}
+.acciones-form {
+  display: flex;
+  gap: 12px;
+}
+
+/* Placeholder tablero */
+.tablero {
+  width: 100%;
+  max-width: 720px;
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+}
+.panel {
+  width: 100%;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* Responsivo básico */
+@media (min-width: 480px) {
+  .btn { font-size: 17px; }
+}
