@@ -116,17 +116,41 @@
     <!-- Pantalla de juego -->
     <section id="pantalla-juego" class="pantalla">
       <div class="contenedor">
-        <h2 class="titulo">🎲 Partida en curso</h2>
-        
-        <div class="area-juego">
-          <p>Aquí irá el desarrollo del juego tipo Cluedo</p>
-          <p>Estado: <span id="estado-partida">En espera</span></p>
-        </div>
+        <h2 id="titulo-pantalla-juego" class="titulo">Nueva partida</h2>
+
+        <form id="form-nueva-partida" class="panel formulario-nueva-partida">
+          <div class="grupo-formulario">
+            <p class="subtitulo">Selecciona el nivel del juego</p>
+            <label class="opcion-control">
+              <input type="radio" name="nivel-juego" value="facil-2x2" checked>
+              <span>Fácil 2x2</span>
+            </label>
+            <label class="opcion-control">
+              <input type="radio" name="nivel-juego" value="normal-2x3">
+              <span>Normal 2x3</span>
+            </label>
+            <label class="opcion-control">
+              <input type="radio" name="nivel-juego" value="dificil-3x3">
+              <span>Difícil 3x3</span>
+            </label>
+          </div>
+
+          <div class="grupo-formulario">
+            <p class="subtitulo">Opciones adicionales</p>
+            <label class="opcion-control">
+              <input type="checkbox" id="chk-casita">
+              <span>Con casita</span>
+            </label>
+            <label class="opcion-control">
+              <input type="checkbox" id="chk-segundo-piso">
+              <span>Con 2º piso</span>
+            </label>
+          </div>
+        </form>
 
         <div class="botonera">
-          <button id="btn-guardar-partida" class="btn">Guardar partida</button>
-          <button id="btn-terminar-partida" class="btn btn-secundario">Terminar partida</button>
-          <button id="btn-ir-inicio-desde-juego" class="btn btn-secundario">Volver al inicio</button>
+          <button id="btn-empezar-partida" class="btn" type="button">Empezar partida</button>
+          <button id="btn-volver-desde-juego" class="btn btn-secundario" type="button">Volver al inicio</button>
         </div>
 
         <p id="mensaje-juego" class="mensaje"></p>

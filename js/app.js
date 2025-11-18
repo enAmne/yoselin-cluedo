@@ -22,9 +22,12 @@ const botonVolverInicio = document.getElementById('btn-volver-inicio');
 const mensajeConfig = document.getElementById('mensaje-config');
 
 // Juego
-const botonGuardarPartida = document.getElementById('btn-guardar-partida');
-const botonTerminarPartida = document.getElementById('btn-terminar-partida');
-const botonIrInicioDesdeJuego = document.getElementById('btn-ir-inicio-desde-juego');
+const formularioNuevaPartida = document.getElementById('form-nueva-partida');
+const tituloPantallaJuego = document.getElementById('titulo-pantalla-juego');
+const botonEmpezarPartida = document.getElementById('btn-empezar-partida');
+const botonVolverDesdeJuego = document.getElementById('btn-volver-desde-juego');
+const checkCasita = document.getElementById('chk-casita');
+const checkSegundoPiso = document.getElementById('chk-segundo-piso');
 const mensajeJuego = document.getElementById('mensaje-juego');
 
 // Estado en memoria
@@ -39,7 +42,7 @@ if (configuracion) {
 }
 
 // Eventos pantalla de inicio
-botonNuevoJuego.addEventListener('click', iniciarNuevoJuego);
+botonNuevoJuego.addEventListener('click', prepararNuevaPartida);
 botonContinuar.addEventListener('click', continuarJuego);
 botonConfigurar.addEventListener('click', () => mostrarPantalla('configuracion'));
 botonSalir.addEventListener('click', salirAplicacion);
@@ -49,9 +52,9 @@ botonGuardarConfig.addEventListener('click', guardarConfiguracion);
 botonVolverInicio.addEventListener('click', () => mostrarPantalla('inicio'));
 
 // Eventos juego
-botonGuardarPartida.addEventListener('click', guardarPartida);
-botonTerminarPartida.addEventListener('click', terminarPartida);
-botonIrInicioDesdeJuego.addEventListener('click', () => mostrarPantalla('inicio'));
+formularioNuevaPartida?.addEventListener('submit', (evento) => evento.preventDefault());
+botonEmpezarPartida.addEventListener('click', empezarPartidaConOpciones);
+botonVolverDesdeJuego.addEventListener('click', () => mostrarPantalla('inicio'));
 
 // Navegación de pantallas
 function mostrarPantalla(nombre) {
@@ -67,19 +70,42 @@ function mostrarPantalla(nombre) {
 
 // Lógica de juego básica
 
-function iniciarNuevoJuego() {
-  // Crear estado de partida inicial
+function prepararNuevaPartida() {
+  resetFormularioNuevaPartida();
+  tituloPantallaJuego.textContent = 'Nueva partida';
+  mostrarMensajeJuego('Selecciona el nivel del juego y las opciones que prefieras.');
+  mostrarPantalla('juego');
+}
+
+function empezarPartidaConOpciones() {
+  const nivelSeleccionado = document.querySelector('input[name="nivel-juego"]:checked');
+  if (!nivelSeleccionado) {
+    mostrarMensajeJuego('Debes elegir un nivel de juego antes de continuar.');
+    return;
+  }
+  const nivel = nivelSeleccionado.value;
+  const opciones = {
+    conCasita: checkCasita.checked,
+    conSegundoPiso: checkSegundoPiso.checked
+  };
+
   estadoPartida = {
     creadaEn: new Date().toISOString(),
     estado: 'iniciada',
     progreso: {},
     jugadores: configuracion?.jugadores || 4,
-    idioma: configuracion?.idioma || 'es'
+    idioma: configuracion?.idioma || 'es',
+    nivel,
+    opciones
   };
   guardarPartidaEnLocal(estadoPartida);
-  mostrarMensajeInicio('Nueva partida creada.');
+  tituloPantallaJuego.textContent = 'Partida en curso';
+  const extras = [];
+  if (opciones.conCasita) extras.push('casita');
+  if (opciones.conSegundoPiso) extras.push('2º piso');
+  const textoExtras = extras.length ? ` con ${extras.join(' y ')}` : '';
+  mostrarMensajeJuego(`Partida creada: ${formatearNombreNivel(nivel)}${textoExtras}.`);
   actualizarEstadoContinuar();
-  mostrarPantalla('juego');
 }
 
 function continuarJuego() {
@@ -89,27 +115,14 @@ function continuarJuego() {
     return;
   }
   estadoPartida = guardada;
-  mostrarMensajeJuego('Partida cargada. Estado: ' + (estadoPartida.estado || 'desconocido'));
+  tituloPantallaJuego.textContent = 'Partida en curso';
+  const nivelMostrado = formatearNombreNivel(estadoPartida.nivel);
+  const extras = [];
+  if (estadoPartida?.opciones?.conCasita) extras.push('casita');
+  if (estadoPartida?.opciones?.conSegundoPiso) extras.push('2º piso');
+  const textoExtras = extras.length ? ` con ${extras.join(' y ')}` : '';
+  mostrarMensajeJuego(`Partida cargada. Nivel: ${nivelMostrado}${textoExtras}.`);
   mostrarPantalla('juego');
-}
-
-function guardarPartida() {
-  if (!estadoPartida) {
-    mostrarMensajeJuego('No hay partida en curso para guardar.');
-    return;
-  }
-  estadoPartida.actualizadaEn = new Date().toISOString();
-  guardarPartidaEnLocal(estadoPartida);
-  mostrarMensajeJuego('Partida guardada correctamente.');
-  actualizarEstadoContinuar();
-}
-
-function terminarPartida() {
-  estadoPartida = null;
-  borrarPartidaDeLocal();
-  mostrarMensajeJuego('Partida terminada. Volviendo al inicio.');
-  actualizarEstadoContinuar();
-  setTimeout(() => mostrarPantalla('inicio'), 500);
 }
 
 // Configuración
@@ -170,4 +183,21 @@ function mostrarMensajeJuego(texto) { mensajeJuego.textContent = texto; }
 function actualizarEstadoContinuar() {
   const hayPartida = !!localStorage.getItem(CLAVE_PARTIDA);
   botonContinuar.disabled = !hayPartida;
+}
+
+function resetFormularioNuevaPartida() {
+  formularioNuevaPartida?.reset();
+  const radioFacil = document.querySelector('input[name="nivel-juego"][value="facil-2x2"]');
+  if (radioFacil) radioFacil.checked = true;
+  if (checkCasita) checkCasita.checked = false;
+  if (checkSegundoPiso) checkSegundoPiso.checked = false;
+}
+
+function formatearNombreNivel(nivel) {
+  switch (nivel) {
+    case 'facil-2x2': return 'Fácil 2x2';
+    case 'normal-2x3': return 'Normal 2x3';
+    case 'dificil-3x3': return 'Difícil 3x3';
+    default: return 'nivel desconocido';
+  }
 }
